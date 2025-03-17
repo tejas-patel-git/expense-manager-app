@@ -1,17 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { COLORS } from '../constants/colors';
 
-const TransactionItem = ({ transaction }) => {
+const TransactionItem = ({ transaction, isLast }) => {
   const { description, amount, date } = transaction;
   const isPositive = amount >= 0;
-  const color = isPositive ? '#2ecc71' : '#e74c3c'; // Vibrant green and red
+  const color = isPositive ? COLORS.accentPositive : COLORS.accentNegative;
   const formattedDate = date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
   });
 
   return (
-    <View style={styles.item}>
+    <View style={[styles.item, isLast && styles.noBorder]}>
       {/* Left: Description and date */}
       <View style={styles.left}>
         <Text style={styles.description}>{description}</Text>
@@ -33,19 +34,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0', // Light separator
+    borderBottomColor: COLORS.separator,
+  },
+  noBorder: {
+    borderBottomWidth: 0,
   },
   left: {
-    flex: 1, // Allows description to take available space
+    flex: 1,
   },
   description: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#333',
+    color: COLORS.textPrimary,
   },
   date: {
     fontSize: 12,
-    color: '#999',
+    color: COLORS.textSecondary,
     marginTop: 2,
   },
   amount: {

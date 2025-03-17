@@ -1,6 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import { View, StyleSheet, FlatList, Text, Dimensions } from 'react-native';
 import TransactionItem from './TransactionItem';
+import { COLORS } from '../constants/colors';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const CARD_WIDTH = SCREEN_WIDTH * 0.85;
 
 const TransactionList = ({ transactions }) => {
   if (!transactions || transactions.length === 0) {
@@ -13,12 +17,17 @@ const TransactionList = ({ transactions }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Recent Transactions</Text>
-      <View style={styles.listWrapper}>
+      <View >
+        <Text style={styles.header}>Recent Transactions</Text>
         <FlatList
           data={transactions}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <TransactionItem transaction={item} />}
+          renderItem={({ item, index }) => (
+            <TransactionItem
+              transaction={item}
+              isLast={index === transactions.length - 1}
+            />
+          )}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
         />
@@ -29,38 +38,45 @@ const TransactionList = ({ transactions }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    padding: 20,
+    backgroundColor: COLORS.surface,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   header: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#444',
-    marginBottom: 8,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: COLORS.textPrimary,
+    marginBottom: 15,
   },
   listWrapper: {
-    backgroundColor: '#fafafa', // Subtle off-white background
+    backgroundColor: COLORS.surface,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#e8e8e8', // Light, subtle border
-    overflow: 'hidden', // Ensures rounded corners clip content
+    borderColor: COLORS.border,
+    overflow: 'hidden',
   },
   listContent: {
     paddingVertical: 5,
-    paddingHorizontal: 5, // Slight inner padding for breathing room
+    paddingHorizontal: 5,
   },
   emptyContainer: {
     padding: 20,
     alignItems: 'center',
-    backgroundColor: '#fafafa',
+    backgroundColor: COLORS.surface,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#e8e8e8',
+    borderColor: COLORS.border,
   },
   emptyText: {
     fontSize: 14,
-    color: '#777',
+    color: COLORS.textMuted,
     fontStyle: 'italic',
   },
 });

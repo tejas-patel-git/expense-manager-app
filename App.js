@@ -1,18 +1,8 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import Dashboard from './components/Dashboard';
+import { Route } from 'expo-router/build/Route';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Dashboard />
-    </View>
+    <Route></Route>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});
