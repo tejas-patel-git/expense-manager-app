@@ -1,10 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Text, Dimensions } from 'react-native';
+import { View, StyleSheet, FlatList, Text } from 'react-native';
 import TransactionItem from './TransactionItem';
 import { COLORS } from '../constants/colors';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const CARD_WIDTH = SCREEN_WIDTH * 0.85;
 
 const TransactionList = ({ transactions }) => {
   if (!transactions || transactions.length === 0) {
