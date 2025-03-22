@@ -27,7 +27,14 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "react-native-auth0",
+        {
+          "domain": "financemanager-dev.us.auth0.com",
+          "clientId": "QnZm4TGTo5lmhoFzxJ1G4r2NvLE1nxru"
+        }
+      ]
     ]
   }
 }
