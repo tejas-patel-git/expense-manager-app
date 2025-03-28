@@ -35,6 +35,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="com.anonymous.expensemanagerapp.auth0" android:host="financemanager-dev.us.auth0.com"/>
+        <data android:scheme="com.anonymous.expensemanagerapp.auth0" android:host="financemanager-dev.us.auth0.com"/>
       </intent-filter>
     </activity>
   </application>
