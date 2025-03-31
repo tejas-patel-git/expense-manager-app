@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "eslint": "^9.23.0",
     "expo": "^52.0.38",
     "expo-constants": "~17.0.8",
     "expo-dev-client": "~5.0.13",

@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text, Button, ActivityIndicator } from 'react-native';
 import { useAuth0 } from 'react-native-auth0';
-import BalanceCard from '../../components/balanceCard'; // Updated path
-import TransactionList from '../../components/TransactionList'; // Updated path
-import { COLORS } from '../../constants/colors'; // Updated path
+import BalanceCard from '../../components/balanceCard';
+import TransactionList from '../../components/TransactionList';
+import { COLORS } from '../../constants/colors';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { router } from 'expo-router';
+import { fetchTransactions } from '../../services/api';
 
 const Index = () => {
-  const { user, clearSession } = useAuth0();
+  const { user, clearSession, getCredentials } = useAuth0(); // Use getCredentials from the hook
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const onLogout = async () => {
     try {
@@ -19,24 +22,25 @@ const Index = () => {
     }
   };
 
-  const [transactions] = useState([
-    { id: 1, amount: 100, description: 'Salary', date: new Date('2023-01-01') },
-    { id: 2, amount: -50, description: 'Groceries', date: new Date('2023-01-02') },
-    { id: 3, amount: -20, description: 'Coffee', date: new Date('2023-01-03') },
-    { id: 4, amount: 200, description: 'Bonus', date: new Date('2023-01-04') },
-    { id: 5, amount: -30, description: 'Lunch', date: new Date('2023-01-05') },
-    { id: 6, amount: -10, description: 'Transport', date: new Date('2023-01-06') },
-  ]);
+  useEffect(() => {
+    const loadTransactions = async () => {
+      try {
+        const credentials = await getCredentials(); // Retrieve the token
+        const data = await fetchTransactions(credentials.accessToken); // Pass the token to the API
+        setTransactions(data);
+      } catch (error) {
+        console.error('Error loading transactions:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const lastFive = [...transactions]
-    .sort((a, b) => b.date.getTime() - a.date.getTime())
-    .slice(0, 5);
+    loadTransactions();
+  }, []);
 
   const balances = [
     { type: 'Total Balance', amount: 1450.75 },
     { type: 'Savings Balance', amount: 820.30 },
-    { type: 'Account 1 Balance', amount: 500.20 },
-    { type: 'Account 2 Balance', amount: 130.25 },
   ];
 
   return (
@@ -45,7 +49,11 @@ const Index = () => {
         <View style={styles.cardContainer}>
           <BalanceCard balances={balances} />
         </View>
-        <TransactionList transactions={lastFive} />
+        {loading ? (
+          <ActivityIndicator size="large" color={COLORS.accentPositive} />
+        ) : (
+          <TransactionList transactions={transactions} />
+        )}
         <Text style={styles.welcomeText}>Welcome, {user.name}!</Text>
         <Text style={styles.title}>Dashboard</Text>
         <Button onPress={onLogout} title="Log Out" />
@@ -71,7 +79,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
   },
 });
 
