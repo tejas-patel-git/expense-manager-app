@@ -11,8 +11,8 @@ export default function Login() {
   const onLogin = async () => {
     try {
       const credentials = await authorize({
-        realm: 'Username-Password-Authentication',
         scope: 'openid profile email',
+        audience: process.env.EXPO_PUBLIC_AUTH0_AUDIENCE,
       });
       if(credentials){
         console.log('Login successful');
